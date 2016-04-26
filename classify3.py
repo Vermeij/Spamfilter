@@ -15,8 +15,8 @@ SAMPLE_PROPORTION = 0.8
 SKIP_FILES = {'cmds'}
 
 SOURCES = [
-	('Data/beck-s', 'ham')
-#	('Data/BG', 'spam')
+	('Data/beck-s', 'ham'),
+	('Data/BG', 'spam')
 ]
 
 def read_files(path):
@@ -51,23 +51,19 @@ def classification():
 		all_emails += [(content, classification) for content in init_emaillist(path)]
 	return all_emails
 
-all_emails = classification()
-print all_emails[0:2]
-print ('\nCorpus size = ' + str(len(all_emails)) + ' emails')
-random.seed(1)
-random.shuffle(all_emails)
 
 
 def preprocess(sentence):
-	# This must be removed to better place
-	titleoption = True
 	word_list = []
-	if titleoption is True:
-		sentencesplit = sentence.splitlines()
-		for word in word_tokenize(sentencesplit[0].decode('utf-8', 'ignore').encode('utf-8')):
-			word_list += ['TITLE' + WordNetLemmatizer().lemmatize(word.lower())]
-	for word in word_tokenize(sentence.decode('utf-8', 'ignore').encode('utf-8')):
-		word_list += [WordNetLemmatizer().lemmatize(word.lower())]
+	try:
+		sentence =	word_tokenize(sentence.decode('utf-8','ignore').encode('utf-8'))
+	except UnicodeDecodeError:
+		pass
+	for word in sentence:
+		try:
+			word_list += [WordNetLemmatizer().lemmatize(word.lower())]
+		except UnicodeDecodeError:
+			pass
 	return word_list
 
 
@@ -101,16 +97,15 @@ def evaluate(train_set, test_set, classifier, name):
 	#print 'neg precision (share of true ham over all called ham):', nltk.precision(refsets['ham'], testsets['ham'])
 	print('Percentage of ham filtered as spam:' + str(round(100- nltk.recall(refsets['ham'], testsets['ham'])*100,2)))
 
-spam = []
-ham = []
-#spam = init_list('enron1/spam/')
-#ham = init_list('enron1/ham/')
 
-all_emails = [(email, 'spam') for email in spam]
-all_emails += [(email, 'ham') for email in ham]
+all_emails = classification()
 print ('\nCorpus size = ' + str(len(all_emails)) + ' emails')
-#random.seed(1)
+random.seed(1)
 random.shuffle(all_emails)
+
+all_features = [(get_features(email, 'bow'), label) for (email, label) in all_emails]
+print(all_emails[0:2])
+print(all_features[0:2])
 
 
 nrevs = 0
@@ -118,9 +113,6 @@ for i in range(nrevs):
 	random.shuffle(all_emails)
 	
 	all_features = [(get_features(email, 'bow'), label) for (email, label) in all_emails]
-	print(spam[2])
-	print(preprocess(spam[2]))
-	print(get_features(spam[2], 'bow'))
 	train_set, test_set = train(all_features, SAMPLE_PROPORTION)
 
 	NB_classifier = NaiveBayesClassifier.train(train_set)
