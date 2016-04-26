@@ -15,12 +15,11 @@ SAMPLE_PROPORTION = 0.8
 SKIP_FILES = {'cmds'}
 
 SOURCES = [
-	('Data/beck-s', 'ham'),
-	('Data/BG', 'spam')
+	('Data/beck-s', 'ham')
+#	('Data/BG', 'spam')
 ]
 
 def read_files(path):
-	print('path:' + str(path))
 	for root, dir_names, file_names in os.walk(path):
 		for path in dir_names:
 			read_files(os.path.join(root, path))
@@ -30,32 +29,33 @@ def read_files(path):
 				if os.path.isfile(file_path):
 					past_header, lines = False, []
 					f = open(file_path)
-					for line in f.read():
+					for line in f:
 						if past_header:
 							lines.append(line)
-						elif line == '/n':
+						elif line == '\n':
 							past_header = True
-						f.close()
-						content = '/n'.join(lines)
-						yield file_path, content
+					f.close()
+					content = '\n'.join(lines)
+					yield file_path, content
 
-for path, classification in SOURCES:
-	for file_name, text in read_files(path):
-		print(file_name)
+def init_emaillist(path):
+	email_list = []
+	for path, classification in SOURCES:
+		for file_path, content in read_files(path):
+			email_list.append(content)
+	return email_list
 
-for root, dir_names, file_names in os.walk('data/beck-s'):
-	print root
-	print dir_names
-	print file_names
+def classification():
+	all_emails = []
+	for path, classification in SOURCES:
+		all_emails += [(content, classification) for content in init_emaillist(path)]
+	return all_emails
 
-def init_list(folder):
-	file_list = os.listdir(folder)
-	a_list = []
-	for a_file in file_list:
-		f = open(folder + a_file, 'r')
-		a_list.append(f.read())
-		f.close()
-	return a_list
+all_emails = classification()
+print all_emails[0:2]
+print ('\nCorpus size = ' + str(len(all_emails)) + ' emails')
+random.seed(1)
+random.shuffle(all_emails)
 
 
 def preprocess(sentence):
@@ -69,6 +69,7 @@ def preprocess(sentence):
 	for word in word_tokenize(sentence.decode('utf-8', 'ignore').encode('utf-8')):
 		word_list += [WordNetLemmatizer().lemmatize(word.lower())]
 	return word_list
+
 
 def get_features(text, setting):
 	if setting=='bow':
