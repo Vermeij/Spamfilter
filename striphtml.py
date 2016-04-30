@@ -28,12 +28,16 @@ def clean_html(text):
 	#j	cleaned = re.sub(r"\n", "", cleaned)
 	cleaned = re.sub(r"^$", "", cleaned)
 	cleaned = re.sub("''|,", "", cleaned)
-	cleaned = re.sub(r"  ", " ", cleaned)
 	cleaned = re.sub(r"\n", " ", cleaned)
 	cleaned = re.sub(r'\s\s+', ' ', cleaned)
 	# remove URLS
 	cleaned = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', cleaned)
 	# remove -
-	cleaned = re.sub(r'-', '', cleaned)
-	cleand = re.sub(r'_', '', cleaned)
+	cleaned = re.sub(r'-', ' ', cleaned)
+	cleaned = re.sub(r'_', ' ', cleaned)
+	cleaned = re.sub(r'=',' ', cleaned)
+	cleaned = re.sub(r'/',' ', cleaned)
+	cleaned = re.sub(r"utf",'', cleaned)
+	cleaned = re.sub(r"  ", " ", cleaned)
+	
 	return cleaned
