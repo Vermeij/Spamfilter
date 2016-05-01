@@ -49,7 +49,7 @@ def clean_html(text):
 	cleaned = re.sub(r"  ", " ", cleaned)
 	return cleaned
 
-# Clean, tokenize, lemmatize en uncapitilize an email.
+# Clean, tokenize, lemmatize en uncapitalize email content.
 def preprocess(sentence):
 	word_list = []
 	try:
@@ -65,8 +65,11 @@ def preprocess(sentence):
 			pass
 	return word_list
 
-# Initialize features.
-# When setting is not 'bow', features are the presence of words in each mail.
+
+#Initialize features. 
+#When setting is 'bow', features are the amount of words in each email. 
+#When setting is not 'bow', features are the presence of words in an email.
+
 def get_features(text, setting):
 	# Frequent and non-informative words in emails (e.g. 'the') are filtered.
 	stoplist = stopwords.words('english')
@@ -93,7 +96,7 @@ def removeuniques(featureslist):
 			if word in features[0]:
 				del(features[0][word])
 
-# Returns list with all features with their labels ready to be trained.
+# Returns list with all features with their labels, ready to be trained.
 def buildfeaturelist(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS):
 	# Only generate new features when LOADFEATURES is False, otherwise load saves features.
 	if LOADFEATURES is True:

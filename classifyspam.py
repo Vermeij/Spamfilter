@@ -6,6 +6,7 @@ from sklearn.svm import SVC, LinearSVC
 from operator import add
 
 from evaluate import *
+
 # Split all features in a train set and a test set
 def buildsets(features, SAMPLE_PROPORTION):
 	train_size = int(len(features) * SAMPLE_PROPORTION)

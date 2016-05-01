@@ -1,6 +1,6 @@
 import os
  
-# walk through all files in path and return path and for each file.
+# walk through all files in path and return path and content for each file.
 def read_files(path):
 	for root, dir_names, file_names in os.walk(path):
 		for path in dir_names:
