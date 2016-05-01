@@ -1,5 +1,4 @@
 #import other procedures for this spamfilter
-from striphtml import *
 from reademails import *
 from getfeatures import *
 from evaluate import *
