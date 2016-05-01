@@ -20,7 +20,7 @@ def evaluate(train_set, test_set, classifier, name):
 # Print average performance measures from n iterations
 def printperformance(name, perfmeasures_n, n):
 	perfmeasures_avg = [x / n for x in perfmeasures_n]
-	print('\n-----------------------\n'+name+'\n-----------------------')
+	print('\n--------------------------\n'+name+'\n--------------------------')
 	print('Accuracy on the training set = ' + str(round(perfmeasures_avg[0],2)))
 	print('Accuracy on the test set = ' + str(round(perfmeasures_avg[1],2)))
 	print('Percentage of spam not filtered:' + str(round(perfmeasures_avg[2], 2)))

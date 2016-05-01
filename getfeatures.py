@@ -36,6 +36,7 @@ def clean_html(text):
 	# Remove URLS
 	cleaned = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', cleaned)
 	# Remove other characters
+	cleaned = re.sub(r"html", "", cleaned)
 	cleaned = re.sub(r"\n", "", cleaned)
 	cleaned = re.sub(r"^$", "", cleaned)
 	cleaned = re.sub("''|,", "", cleaned)
@@ -66,9 +67,9 @@ def preprocess(sentence):
 	return word_list
 
 
-#Initialize features. 
-#When setting is 'bow', features are the amount of words in each email. 
-#When setting is not 'bow', features are the presence of words in an email.
+# Initialize features. 
+# When setting is 'bow', features are the amount of words in each email. 
+# When setting is not 'bow', features are the presence of words in an email.
 
 def get_features(text, setting):
 	# Frequent and non-informative words in emails (e.g. 'the') are filtered.
@@ -83,7 +84,7 @@ def removeuniques(featureslist):
 	countwords = {}
 	uniquewords = []
 	# For each word, count the amount of mails in which it is present.
-	for features in all_features:
+	for features in featureslist:
 		for word in features[0].keys():
 			if word in countwords:
 				countwords[word] += 1
@@ -91,13 +92,13 @@ def removeuniques(featureslist):
 				countwords[word] = 1
 	# For each word that appears in only one mail, remove the feature
 	uniquewords = [k for k, v in countwords.iteritems() if v == 1]
-	for features in all_features:
+	for features in featureslist:
 		for word in uniquewords:
 			if word in features[0]:
 				del(features[0][word])
 
 # Returns list with all features with their labels, ready to be trained.
-def buildfeaturelist(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS):
+def buildfeaturelist(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS, COUNTSETTING):
 	# Only generate new features when LOADFEATURES is False, otherwise load saves features.
 	if LOADFEATURES is True:
 		all_features = pickle.load(open('all_features.p', 'rb'))
@@ -114,7 +115,7 @@ def buildfeaturelist(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS):
 		# Label all the emails
 		all_emails = [(email, 'spam') for email in spam]
 		all_emails += [(email, 'ham') for email in ham]
-		all_features = [(get_features(email, 'bow'), label) for (email, label) in all_emails]
+		all_features = [(get_features(email, COUNTSETTING), label) for (email, label) in all_emails]
 
 		# Remove all features that appear in only one mail
 		removeuniques(all_features)

@@ -12,16 +12,20 @@ HAMFOLDERS = ['Data/beck-s/']
 SPAMFOLDERS = ['Data/BG/2004/']
 
 # Specify whether to load last created features. Set False when to create new features from emails. Set True when same features are used.
-LOADFEATURES = True
+LOADFEATURES =  True
+
+# When setting is 'bow', features are the amount of words in each email. 
+# When setting is not 'bow', features are the presence of words in an email.
+COUNTSETTING = 'notbow'
 
 # Set number iterations to determine performance measures 
-n = 5
+n = 10
 
 # Get list of features with their labels spam or ham 
-all_features = buildfeaturelist(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS)
+all_features = buildfeaturelist(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS, COUNTSETTING)
 
 # Print sizes of emails processed
-print('__________________________\nTotal size = ' + str(len(all_features)) + ' emails')
+print('==========SPAMFILTER==========\nTotal size = ' + str(len(all_features)) + ' emails')
 print('Training set size = ' + str(int(len(all_features)*SAMPLE_PROPORTION)) + ' emails')
 print('Test set size = ' + str(len(all_features) - int(len(all_features)*SAMPLE_PROPORTION)) + ' emails')
 

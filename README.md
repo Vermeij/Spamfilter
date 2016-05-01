@@ -8,61 +8,61 @@ The files are as follows:
 
 ### reademails.py
 
-- read_files(path):
+- **read_files(path):**
 
 Walk through all files in given path and return content
 
-- init_emaillsit(path):
+- **init_emaillsit(path):**
 
 Initialize list with all raw email content
 
 ### getfeatures.py
 
-- MLstripper(HTMLParser):
+- **MLstripper(HTMLParser):**
 
 Create a stripper class for parsing text files formatted in HTML
 
-- strip_tags(html):
+- **strip_tags(html):**
 
 Instantiate the HTMLparser and fed it HTML
 
-- cleanhtml(text):
+- **cleanhtml(text):**
 
 Manually remove additional HTML tags and other substrings which are not preferred to be features.
 
-- preprocess(sentence):
+- **preprocess(sentence):**
 
 Clean, tokenize, lemmatize en uncapitalize email content.
 
-- get_features(text, setting):
+- **get_features(text, setting):**
 
 Initialize features. When setting is 'bow', features are the amount of words in each email. When setting is not 'bow', features are the presence of words in an email.
 
-- removeuniques(featureslist):
+- **removeuniques(featureslist):**
 
 Remove features that appear only in one email
 
-- buildfeaturelst(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS):
+- **buildfeaturelst(LOADFEATURES, SPAMFOLDERS, HAMFOLDERS):**
 
 Returns list with all features with their labels, ready to be trained.
 
 ### classifyspam.py
 
-- buildsets(features, SAMPLE_PROPORTION):
+- **buildsets(features, SAMPLE_PROPORTION):**
 
 Split all features in a train set and a test set.
 
-- buildclassifiers(featureslist, SMAPLE_PROPORTION, n):
+- **buildclassifiers(featureslist, SMAPLE_PROPORTION, n):**
 
 Build different classifiers for given features and print results of n-fold tests.
 
 ### evaluate.py
 
-- evaluate(train_set, test_set, classifier, name):
+- **evaluate(train_set, test_set, classifier, name):**
 
 Calculate performance measures for classfiier
 
-- printperformance(name, perfmeasures_n, n):
+- **printperformance(name, perfmeasures_n, n):**
 
 Print average performance measures from n iterations
 

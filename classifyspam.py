@@ -30,7 +30,7 @@ def buildclassifiers(featureslist, SAMPLE_PROPORTION, n):
 				spamclassifier = SklearnClassifier(LogisticRegression())
 				spamclassifier.train(train_set)
 			if name == 'Linear SCV':
-				spamclassifier = SklearnClassifier(LinearSVC())
+				spamclassifier = SklearnClassifier(LinearSVC(C=0.01))
 				spamclassifier.train(train_set)
 			perfmeasures_i = evaluate(train_set, test_set, spamclassifier, name)
 			if i == 0:
